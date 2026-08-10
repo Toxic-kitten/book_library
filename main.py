@@ -18,7 +18,7 @@ def create_book():
     author = input('Введите автора книги: ')
     year = input('Введите год издания книги: ')
     title, author, year = validation_book(title, author, year)
-    book = dict(title=title, author=author, year=int(year))
+    book = dict(title=title, author=author, year=int(year), is_read="не прочитана")
     return book
 
 
@@ -56,11 +56,42 @@ def menu_find_book(library):
         print("Данная книга не существует!")
 
 
+# Функция для вывода всей библиотеки
+def show_library(library):
+    print("Ваша библиотека")
+    for num, book in enumerate(library):
+        print(f'{num+1}) {book["title"]}, {book["author"]}, {book["year"]}, статус: {book["is_read"]}')
+
+
+def mark_as_read(book):
+    book['is_read'] = "прочитано"
+
+
+def menu_mark_as_read(library):
+    if len(library) != 0:
+        print("Выберите книгу которую вы прочитали:")
+        show_library(library)
+        user_choice = get_user_choice()
+        try:
+            book = library[int(user_choice) - 1]
+            if book['is_read'] != "прочитано":
+                mark_as_read(book)
+                print(f"Книга {book['title']} отмечена как прочитанная!")
+            else:
+                print(f"Книга {book['title']} уже отмечена как прочитанная!")
+        except IndexError:
+            print("Неизвестный номер книги! Попробуйте ввести номер еще раз.")
+        except ValueError:
+            print("Вы ввели текст, а не число! Попробуйте ввести номер еще раз.")
+    else:
+        print("Ваша библиотека пуста, сначала добавьте хотя бы одну книгу!")
+
+
 def show_menu():
     print("=============")
     print("1. Добавить книгу")
-    print("2. Удалить книгу - в разработке")
-    print("3. Показать библиотеку - в разработке")
+    print("2. Отметить книгу как прочитанную")
+    print("3. Показать библиотеку")
     print("4. Найти книгу")
     print("0. Выход")
     print("=============")
@@ -92,6 +123,8 @@ def main():
     # Словарь дейстивий пользователя
     actions = {
         '1': lambda: menu_add_book(library),
+        '2': lambda: menu_mark_as_read(library),
+        '3': lambda: show_library(library),
         '4': lambda: menu_find_book(library),
         '0': log_out_of_system
     }
@@ -107,4 +140,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
