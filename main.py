@@ -87,12 +87,35 @@ def menu_mark_as_read(library):
         print("Ваша библиотека пуста, сначала добавьте хотя бы одну книгу!")
 
 
+def menu_delete_book(library):
+    if len(library) != 0:
+        print("Выберите номер книги которую вы хотите удалить:")
+        show_library(library)
+        user_choice = get_user_choice()
+        try:
+            index = int(user_choice) - 1
+            book = library[index]
+            delete_book(index, library)
+            print(f"Книга {book['title']} успешно удалена!")
+        except IndexError:
+            print("Неизвестный номер книги! Попробуйте ввести номер еще раз.")
+        except ValueError:
+            print("Вы ввели текст, а не число! Попробуйте ввести номер еще раз.")
+    else:
+        print("Ваша библиотека пуста, сначала добавьте хотя бы одну книгу!")
+
+
+def delete_book(index, library):
+    del library[index]
+
+
 def show_menu():
     print("=============")
     print("1. Добавить книгу")
     print("2. Отметить книгу как прочитанную")
     print("3. Показать библиотеку")
     print("4. Найти книгу")
+    print("5. Удалить книгу")
     print("0. Выход")
     print("=============")
 
@@ -126,6 +149,7 @@ def main():
         '2': lambda: menu_mark_as_read(library),
         '3': lambda: show_library(library),
         '4': lambda: menu_find_book(library),
+        '5': lambda: menu_delete_book(library),
         '0': log_out_of_system
     }
 
