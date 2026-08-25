@@ -59,8 +59,47 @@ def menu_find_book(library):
 # Функция для вывода всей библиотеки
 def show_library(library):
     print("Ваша библиотека")
+    print('1. Показать только прочитанные книги')
+    print('2. Показать только не прочитанные книги')
+    print("3. Показать все книги")
+    lib_actions = {
+        '1': lambda: make_filter_books_list(is_read, library),
+        '2': lambda: make_filter_books_list(is_not_read, library),
+        '3': lambda: library
+    }
+    user_choice = get_user_choice()
+    choice_books = library_actions(user_choice, lib_actions)
+    if choice_books is None:
+        print("Неизвестная команда!")
+    elif not choice_books:
+        print("Список пуст")
+    else:
+        show_books(choice_books)
+
+
+def library_actions(choice, actions):
+    try:
+        return actions[choice]()
+    except KeyError:
+        return None
+
+
+def make_filter_books_list(function, library):
+    filter_books = list(filter(function, library))
+    return filter_books
+
+
+def show_books(library):
     for num, book in enumerate(library):
-        print(f'{num+1}) {book["title"]}, {book["author"]}, {book["year"]}, статус: {book["is_read"]}')
+        print(f'{num + 1}) {book["title"]}, {book["author"]}, {book["year"]}, статус: {book["is_read"]}')
+
+
+def is_read(book):
+    return book["is_read"] == 'прочитано'
+
+
+def is_not_read(book):
+    return not is_read(book)
 
 
 def mark_as_read(book):
@@ -70,7 +109,7 @@ def mark_as_read(book):
 def menu_mark_as_read(library):
     if len(library) != 0:
         print("Выберите книгу которую вы прочитали:")
-        show_library(library)
+        show_books(library)
         user_choice = get_user_choice()
         try:
             book = library[int(user_choice) - 1]
