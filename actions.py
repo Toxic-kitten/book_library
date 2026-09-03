@@ -47,3 +47,21 @@ def delete_book(index, library):
 # Отметить книгу как прочитанную
 def mark_as_read(book):
     book['is_read'] = "прочитано"
+
+
+def edit_book(book, field_name, new_value):
+    book[field_name] = new_value
+    title, author, year = validation_book(book["title"], book["author"], book["year"])
+    book = dict(title=title, author=author, year=int(year), is_read=book["is_read"])
+    return book
+
+
+def user_choice_validation(user_choice, available_options):
+    while user_choice not in available_options:
+        print("Выберете один доступных вариантов:", *available_options)
+        user_choice = input("Ваш выбор: ")
+    return user_choice
+
+
+def is_library_empty(library):
+    return len(library) == 0

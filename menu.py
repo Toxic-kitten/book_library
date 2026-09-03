@@ -1,17 +1,6 @@
 import actions
 
 
-def show_menu():
-    print("=============")
-    print("1. Добавить книгу")
-    print("2. Отметить книгу как прочитанную")
-    print("3. Показать библиотеку")
-    print("4. Найти книгу")
-    print("5. Удалить книгу")
-    print("0. Выход")
-    print("=============")
-
-
 def continue_message():
     input("Нажмите Enter для продолжения... ")
 
@@ -32,15 +21,28 @@ def user_actions(choice, actions_dict):
 
 
 def create_actions(library):
-    actions_list = {
+    actions_dict = {
         '1': lambda: menu_add_book(library),
         '2': lambda: menu_mark_as_read(library),
-        '3': lambda: menu_show_library(library),
-        '4': lambda: menu_find_book(library),
-        '5': lambda: menu_delete_book(library),
+        '3': lambda: menu_edit_book(library),
+        '4': lambda: menu_delete_book(library),
+        '5': lambda: menu_find_book(library),
+        '6': lambda: menu_show_library(library),
         '0': log_out_of_system
     }
-    return actions_list
+    return actions_dict
+
+
+def show_menu():
+    print("=============")
+    print("1. Добавить книгу")
+    print("2. Отметить книгу как прочитанную")
+    print("3. Изменить книгу")
+    print("4. Удалить книгу")
+    print("5. Найти книгу")
+    print("6. Показать библиотеку")
+    print("0. Выход")
+    print("=============")
 
 
 def menu_add_book(library):
@@ -141,3 +143,33 @@ def menu_delete_book(library):
             print("Вы ввели текст, а не число! Попробуйте ввести номер еще раз.")
     else:
         print("Ваша библиотека пуста, сначала добавьте хотя бы одну книгу!")
+
+
+def menu_edit_book(library):
+    if actions.is_library_empty(library):
+        return print("Ваша библиотека пуста, сначала добавьте хотя бы одну книгу!")
+
+    print("Выберите номер книги которую вы хотите изменить:")
+    show_books(library)
+    user_choice = get_user_choice()
+    try:
+        index = int(user_choice) - 1
+        book = library[index]
+        print(f'Книга: {book["title"]}, {book["author"]}, {book["year"]}, статус: {book["is_read"]}')
+
+        print("Выберите что вы конкретно хотите изменить:")
+        print("Напишите название поля(title/author/year):")
+        fields = ['title', 'author', 'year']
+        field_choice = get_user_choice()
+        field_choice = actions.user_choice_validation(field_choice, fields)
+
+        print("Напишите новое значение поля:")
+        new_value = get_user_choice()
+        library[index] = actions.edit_book(book, field_choice, new_value)
+        print("Книга успешно изменена!")
+    except IndexError:
+        print("Неизвестный номер книги! Попробуйте ввести номер еще раз.")
+    except ValueError:
+        print("Вы ввели текст, а не число! Попробуйте ввести номер еще раз.")
+
+

@@ -1,9 +1,10 @@
 import menu
+import storage
 
 
 def main():
     # Спискок для хранения всех книг(словарей)
-    library = []
+    library = storage.load_library()
 
     # Словарь дейстивий пользователя
     actions = menu.create_actions(library)
@@ -15,6 +16,7 @@ def main():
         menu.continue_message()
         menu.show_menu()
         user_choice = menu.get_user_choice()
+    storage.save_library(library)
 
 
 if __name__ == "__main__":
