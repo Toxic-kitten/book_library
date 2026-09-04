@@ -5,11 +5,11 @@ def validation_book(title, author, year):
     # С цифрами разберусь потом
     while author == "":
         author = input('Имя автора не должно быть пустым. Введите автора книги заново: ')
-    while not year.isdigit():
+    while not str(year).isdigit():
         year = input('Год должен состоять только из цифр от 0 до 2026. Введите год издания книги заново: ')
     while not (0 < int(year) <= 2026):
         year = input('Год должен состоять только из цифр от 0 до 2026. Введите год издания книги заново: ')
-    return title, author, year
+    return title, author, int(year)
 
 
 # Функция для создания книги
@@ -18,7 +18,7 @@ def create_book():
     author = input('Введите автора книги: ')
     year = input('Введите год издания книги: ')
     title, author, year = validation_book(title, author, year)
-    book = dict(title=title, author=author, year=int(year), is_read="не прочитана")
+    book = dict(title=title, author=author, year=year, is_read="не прочитана")
     return book
 
 
@@ -52,7 +52,7 @@ def mark_as_read(book):
 def edit_book(book, field_name, new_value):
     book[field_name] = new_value
     title, author, year = validation_book(book["title"], book["author"], book["year"])
-    book = dict(title=title, author=author, year=int(year), is_read=book["is_read"])
+    book = dict(title=title, author=author, year=year, is_read=book["is_read"])
     return book
 
 
