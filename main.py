@@ -3,7 +3,6 @@ import storage
 
 
 def main():
-    # Спискок для хранения всех книг(словарей)
     library = storage.load_library()
 
     # Словарь дейстивий пользователя
